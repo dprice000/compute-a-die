@@ -3,6 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Paint.Net Files
+*.pdn
+
+#OpenShot Video Editor Files
+*.osp
+
 # User-specific files
 *.rsuser
 *.suo
