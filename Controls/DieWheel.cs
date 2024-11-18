@@ -21,7 +21,7 @@ namespace Comput_a_die_v2.Controls
     private readonly Point _spriteSize = new Point(SPRITE_WIDTH, SPRITE_HEIGHT);
     private float _animationTimer = 0;
 
-    private int _currentSprite = 0;
+    private int? _currentSprite = null;
     private int _currentMomentum = STARTING_MOMENTUM;
     private float _momentumTimer = 0;
 
@@ -120,12 +120,13 @@ namespace Comput_a_die_v2.Controls
 
     internal void Draw(SpriteBatch spriteBatch)
     {
-      if (!IsSpinning)
+      if (!_currentSprite.HasValue)
       {
         spriteBatch.Draw(_spriteTexture, _spritePosition, _darkRectangle, Color.White);
+        return;
       }
 
-      spriteBatch.Draw(_spriteTexture, _spritePosition, _spriteRectangles[_currentSprite], Color.White);
+      spriteBatch.Draw(_spriteTexture, _spritePosition, _spriteRectangles[_currentSprite!.Value], Color.White);
     }
 
     internal void Update(GameTime gameTime)
@@ -139,6 +140,11 @@ namespace Comput_a_die_v2.Controls
       IsSpinning = true;
       IsStopping = false;
       _currentMomentum = STARTING_MOMENTUM;
+
+      if (!_currentSprite.HasValue)
+      {
+        _currentSprite = 0;
+      }
     }
 
     internal void StopSpin() 

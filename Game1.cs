@@ -15,11 +15,14 @@ namespace Comput_a_die_v2
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
+    private Texture2D _faceplateTexture;
+    private readonly Vector2 _faceplatePosition = Vector2.Zero;
+
     private bool _prevIsSpinning;
     private AudioOrchestrator _audioOrchestrator;
     private DieWheel _dieWheel1, _dieWheel2;
 
-    private MouseState _mouseState, _prevMouseState;
+    private bool _isPressedState, _prevPressedState;
 
     private bool IsSpinning => _dieWheel1.IsSpinning || _dieWheel2.IsSpinning;
 
@@ -48,6 +51,7 @@ namespace Comput_a_die_v2
       // Create a new SpriteBatch, which can be used to draw textures.
       _spriteBatch = new SpriteBatch(GraphicsDevice);
       var spriteTexture = Content.Load<Texture2D>("Sprites\\FullDieSpriteSheet");
+      _faceplateTexture = Content.Load<Texture2D>("Sprites\\Faceplate");
 
       var position1 = STARTING_POINT;
       _dieWheel1 = new DieWheel(spriteTexture, position1);
@@ -60,19 +64,30 @@ namespace Comput_a_die_v2
       if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
         Exit();
 
-      _prevMouseState = _mouseState;
-      _mouseState = Mouse.GetState();
       var gameFocused = this.IsActive;
+      var mouseState = Mouse.GetState();
+      var keyboardState = Keyboard.GetState();
 
-      if (gameFocused && _mouseState.LeftButton != _prevMouseState.LeftButton)
+      if (mouseState.LeftButton == ButtonState.Pressed
+          || keyboardState.IsKeyDown(Keys.Space))
       {
-        if (_mouseState.LeftButton == ButtonState.Pressed)
+          _isPressedState = true;
+      }
+      else if (mouseState.LeftButton == ButtonState.Released
+              && keyboardState.IsKeyUp(Keys.Space))
+      {
+        _isPressedState = false;
+      }
+
+      if (gameFocused && _isPressedState != _prevPressedState)
+      {
+        if (_isPressedState)
         {
           _audioOrchestrator.StartSpin();
           _dieWheel1.StartSpin();
           _dieWheel2.StartSpin();
         }
-        else if (_mouseState.LeftButton == ButtonState.Released)
+        else
         {
           _audioOrchestrator.StopSpin();
           _dieWheel1.StopSpin();
@@ -91,6 +106,7 @@ namespace Comput_a_die_v2
       // TODO: Add your update logic here
 
       _prevIsSpinning = IsSpinning;
+      _prevPressedState = _isPressedState;
       base.Update(gameTime);
     }
 
@@ -99,6 +115,7 @@ namespace Comput_a_die_v2
       GraphicsDevice.Clear(BACKGROUND_COLOR);
 
       _spriteBatch.Begin();
+      _spriteBatch.Draw(_faceplateTexture, _faceplatePosition, Color.White);
       _dieWheel1.Draw(_spriteBatch);
       _dieWheel2.Draw(_spriteBatch);
       _spriteBatch.End();
