@@ -10,8 +10,8 @@ namespace Comput_a_die_v2
   {
     private const int SPRITE_WIDTH = 200;
     private const int WHEEL_MARGIN = 60;
-    private readonly Color BACKGROUND_COLOR = new Color(0, 33, 30);
-    private readonly Vector2 STARTING_POINT = new Vector2(170, 100);
+    private readonly Color BACKGROUND_COLOR = Color.Black;
+    private readonly Vector2 STARTING_POINT = new Vector2(170, 60);
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
