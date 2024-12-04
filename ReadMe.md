@@ -1,4 +1,4 @@
-![Compute-A-Die Screenshot](https://imgur.com/a/fd0J1BK)
+![Compute-A-Die Screenshot](https://i.imgur.com/QqOabn1.png)
 
 # Overview
 A simple die roller with a retro-future twist!
